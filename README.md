@@ -9,11 +9,31 @@ then runs `claude` on the new box and hands it Chrome + VSCode setup.
 
 ## Use
 
+On the new machine, once base OS + git are up:
+
 ```
-git clone <this-repo-url> ~/dotfiles-migration
+git clone https://github.com/RhysCole/dotfiles-migration.git ~/dotfiles-migration
 cd ~/dotfiles-migration
 ./install.sh
 ```
+
+Order of operations, and where it needs you:
+
+1. `pacman -Syu`.
+2. Tailscale install + `tailscale up` — opens an auth URL, approve it in the
+   browser.
+3. Claude Code install + config restore. Run `claude` once after — it'll
+   prompt login since credentials aren't in this repo on purpose.
+4. Syncthing install/enable — then **stop before it syncs for real**. It
+   prints an `scp` command to pull `cert.pem` / `key.pem` / `config.xml`
+   straight from the old laptop over Tailscale (both machines need to show
+   in `tailscale status` first). Do this before starting the service, or
+   Syncthing treats the new box as a stranger device.
+5. Obsidian install — point it at the vault once Syncthing has caught up.
+6. Neovim + LazyVim config restore. Run `nvim` once so `lazy.nvim` pulls
+   plugins from the committed lock file.
+7. Last step auto-runs `claude` with a prompt to install and configure
+   Chrome + VSCode — answer whatever it asks.
 
 ## Deliberately excluded (never committed here)
 
